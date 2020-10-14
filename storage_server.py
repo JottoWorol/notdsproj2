@@ -17,9 +17,10 @@ class Replicator:
         self.sibling_ips = siblings
         self.sockets = []
         for ip in siblings:
-            s = socket.socket()
-            s.connect((ip, 5000))
-            self.sockets.append(s)
+            if ping(ip, size=40, count=1)._responses[0].success:
+                s = socket.socket()
+                s.connect((ip, 5000))
+                self.sockets.append(s)
             
     def Replicate(self, name):
         if not self.isPrimary:
